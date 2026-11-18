@@ -123,14 +123,14 @@
           <p class="context">Naya Studio</p>
           <h3>Catalog extraction platform</h3>
           <p>Door hardware manufacturers publish their pricing as long PDF price books: grids of products by finish, ditto marks, option adders and footnotes. I built the pipeline that reads them with Gemini and Claude behind a swappable provider interface. It works in gates: find every series and its pages, infer each series' pricing model, then extract every product. A person approves each gate, and the result is published as a versioned price book in MongoDB.</p>
-          <p class="result"><mark>65 catalogs</mark> extracted at <mark>about 95% field-level accuracy</mark>, checked against Avaware's product database.</p>
+          <p class="result"><mark>65 catalogs</mark> extracted at <mark>about 95% field-level accuracy</mark>, checked against an existing reference product database.</p>
           <ul class="tags"><li>Gemini</li><li>Claude</li><li>MongoDB</li><li>Node.js</li></ul>
         </article>
 
         <article class="project reveal" style="--tint: var(--tint-2)">
           <p class="context">Naya Studio</p>
           <h3>AI estimation engine</h3>
-          <p>Configuring a project's door hardware in Avaware used to mean reading the spec and entering every item by hand. The engine reads the spec, matches each item to the extracted price books, sets its options, and flags anything it isn't sure about.</p>
+          <p>Configuring a project's door hardware in the industry-standard estimating software used to mean reading the spec and entering every item by hand. The engine reads the spec, matches each item to the extracted price books, sets its options, and flags anything it isn't sure about.</p>
           <p class="result">About <mark>3 hours of manual work per project down to 5–10 minutes</mark>.</p>
           <ul class="tags"><li>LLMs</li><li>Confidence scoring</li><li>TypeScript</li></ul>
         </article>
