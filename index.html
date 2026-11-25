@@ -97,7 +97,11 @@ a { color: inherit; text-underline-offset: 3px; }
 .bar nav { display: flex; gap: 6px; align-items: center; }
 .bar nav a.link { text-decoration: none; font-size: 15.5px; font-weight: 550; padding: 8px 12px; color: var(--ink-soft); }
 .bar nav a.link:hover { color: var(--ink); }
+.bar .nav-links { display: flex; gap: 6px; align-items: center; }
 .theme-toggle { width: 40px; height: 40px; padding: 0; justify-content: center; }
+.menu-btn { display: none; width: 44px; height: 44px; padding: 0; justify-content: center; }
+.menu-btn i { display: block; width: 18px; height: 2px; background: currentColor; box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor; }
+.menu-btn[aria-expanded="true"] { background: var(--ink); color: var(--paper); }
 
 /* window chrome */
 .win { border: var(--bw) solid var(--ink); border-radius: var(--r); overflow: hidden; background: var(--surface); }
@@ -117,6 +121,7 @@ a { color: inherit; text-underline-offset: 3px; }
 .beat .display { font-size: clamp(54px, 7.2vw, 106px); margin-bottom: 20px; }
 .beat p { font-size: clamp(19px, 1.6vw, 22px); margin: 0 0 12px; }
 .beat .aside { color: var(--ink-soft); font-size: 17px; }
+.beat .punch { font-weight: 700; padding-left: 14px; border-left: 5px solid var(--accent); margin-top: 18px; }
 .beat a { font-weight: 600; }
 .rail { grid-area: 3 / 1; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--bw) solid var(--ink); }
 .rail li { position: relative; }
@@ -414,16 +419,20 @@ a { color: inherit; text-underline-offset: 3px; }
   :root { --body-size: 17px !important; }
   .wrap { padding: 0 16px; }
   .bar { padding: 10px 16px; }
-  .bar nav a.link { display: none; }
+  .theme-toggle { display: none; }
+  .menu-btn { display: inline-flex; }
+  .bar .nav-links { display: none; position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; align-items: stretch; gap: 0; background: var(--paper); border-bottom: var(--bw) solid var(--ink); box-shadow: 0 18px 30px -22px rgba(0, 0, 0, .5); }
+  .bar.open .nav-links { display: flex; }
+  .bar nav .nav-links a.link { padding: 15px 16px; font-size: 17px; font-weight: 600; color: var(--ink); border-top: 1px solid var(--line); }
   .build { height: 320vh; }
-  .build-stick { grid-template-columns: 1fr; grid-template-rows: auto auto; gap: 14px; padding: 64px 16px 12px; align-items: start; }
-  .story { order: 2; height: auto; grid-template-rows: auto auto auto; }
+  .build-stick { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; gap: 14px; padding: 80px 16px 16px; align-items: stretch; overflow: hidden; }
+  .story { order: 2; height: auto; max-height: none; grid-template-rows: auto auto auto; }
   .who { font-size: 14px; margin-bottom: 10px; }
   .beat .display { font-size: 42px; margin-bottom: 8px; }
   .beat p { font-size: 16px; } .beat .aside { font-size: 15px; }
   .rail { grid-area: 2 / 1; margin-bottom: 16px; } .beat { grid-row: 3; align-self: start; }
   .rail button span { display: none; }
-  .workspace { order: 1; height: 50vh; }
+  .workspace { order: 1; height: 100%; max-height: 520px; min-height: 0; align-self: center; }
   .editor { width: 78%; height: 40%; }
   .code { font-size: 11px; }
   .browser { width: 94%; height: 64%; }
@@ -448,9 +457,36 @@ a { color: inherit; text-underline-offset: 3px; }
   .terms { grid-template-columns: 1fr; }
 }
 
+/* narrow phones: the shared board becomes two tidy rows */
+@media (max-width: 520px) {
+  .canvas { height: 500px; }
+  .blk { font-size: 12px; }
+  .blk .cap span { display: none; }
+  .blk.mood { left: 5%; top: 52px; width: 43%; } .blk.mood .sw { height: 86px; }
+  .blk.note { left: 52%; top: 52px; width: 43%; }
+  .pin { left: 24%; top: 196px; } .pin .bubble { max-width: 190px; font-size: 12px; }
+  .blk.vid { left: 5%; top: 276px; width: 43%; } .blk.vid .play { height: 76px; }
+  .blk.model { left: 52%; top: 276px; width: 43%; } .blk.model .stage3d { height: 92px; }
+}
+
+/* short phones: tighten the story so the windows keep some room */
+@media (max-width: 820px) and (max-height: 740px) {
+  .who { display: none; }
+  .rail { margin-bottom: 10px; }
+  .rail button { padding-top: 10px; }
+  .rail button b { font-size: 13.5px; }
+  .beat .display { font-size: 32px; margin-bottom: 6px; }
+  .beat p { font-size: 15px; margin-bottom: 8px; line-height: 1.45; }
+  .beat .aside { font-size: 14px; }
+  .beat .punch { margin-top: 10px; }
+  .build-stick { gap: 10px; padding-bottom: 12px; }
+}
+
 /* without JavaScript the opening is a plain, readable story */
 html:not(.js) .build { height: auto; }
-html:not(.js) .build-stick { position: static; height: auto; }
+html:not(.js) .build-stick { position: static; height: auto; overflow: visible; }
+html:not(.js) .workspace { height: 50vh; min-height: 320px; max-height: none; }
+html:not(.js) .menu-btn { display: none; }
 html:not(.js) .story { display: block; max-height: none; }
 html:not(.js) .beat { opacity: 1; transform: none; margin-bottom: 28px; }
 html:not(.js) .rail, html:not(.js) .scroll-hint, html:not(.js) .editor { display: none; }
@@ -467,13 +503,16 @@ html:not(.js) .est .m, html:not(.js) .est .c, html:not(.js) .est .sum, html:not(
 
 <header class="bar">
   <a class="name" href="#top"><i></i>Niranjan B A</a>
-  <nav>
-    <a class="link" href="#naya">Work</a>
-    <a class="link" href="#walls">Side products</a>
-    <a class="link" href="#journey">Journey</a>
-    <a class="link" href="#contact">Contact</a>
+  <nav aria-label="Main">
+    <div class="nav-links" id="nav-links">
+      <a class="link" href="#naya">Work</a>
+      <a class="link" href="#walls">Side products</a>
+      <a class="link" href="#journey">Journey</a>
+      <a class="link" href="#contact">Contact</a>
+    </div>
     <a class="btn solid" href="Niranjan_B_A_Resume.pdf" target="_blank">Resume</a>
     <button class="btn theme-toggle" id="theme" aria-label="Switch colour theme">◐</button>
+    <button class="btn menu-btn" id="menu" aria-label="Menu" aria-expanded="false" aria-controls="nav-links"><i></i></button>
   </nav>
 </header>
 
@@ -487,12 +526,12 @@ html:not(.js) .est .m, html:not(.js) .est .c, html:not(.js) .est .sum, html:not(
       <div class="beat on" data-beat="0">
         <p class="display">2020</p>
         <p>In my third year of engineering, I paid someone to build my startup idea: Tenzify, a place where local shopkeepers could sell online.</p>
-        <p class="aside">Months later, it still looked something like this.</p>
+        <p class="punch">Months later, this was all I had.</p>
       </div>
       <div class="beat" data-beat="1">
         <p class="display">So I learned</p>
         <p>HTML, then CSS. The first page I styled myself felt like something great, so I kept going.</p>
-        <p class="aside">The Register button still did nothing.</p>
+        <p class="punch">The Register button still did nothing.</p>
       </div>
       <div class="beat" data-beat="2">
         <p class="display">8 hours a day</p>
@@ -845,6 +884,14 @@ html:not(.js) .est .m, html:not(.js) .est .c, html:not(.js) .est .sum, html:not(
   var root = document.documentElement;
 
   /* theme */
+  /* menu on small screens */
+  var bar = document.querySelector(".bar"), menuBtn = document.getElementById("menu");
+  function setMenu(open) { bar.classList.toggle("open", open); menuBtn.setAttribute("aria-expanded", String(open)); }
+  menuBtn.addEventListener("click", function () { setMenu(!bar.classList.contains("open")); });
+  document.querySelectorAll(".nav-links a").forEach(function (a) { a.addEventListener("click", function () { setMenu(false); }); });
+  document.addEventListener("click", function (e) { if (!bar.contains(e.target)) setMenu(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && bar.classList.contains("open")) { setMenu(false); menuBtn.focus(); } });
+
   document.getElementById("theme").addEventListener("click", function () {
     var dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
     root.dataset.theme = dark ? "light" : "dark";
